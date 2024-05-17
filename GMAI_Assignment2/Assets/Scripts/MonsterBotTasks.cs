@@ -44,6 +44,67 @@ public class MonsterBotTasks : MonoBehaviour
     }
 
     [Task]
+    bool CanSeePlayer()
+    {
+        return true;
+    }
+
+    [Task]
+    bool IsRoaming()
+    {
+        return true;
+    }
+
+    [Task]
+    bool IsGuarding()
+    {
+        displayText.text = "Guarding";
+        return true;
+    }
+
+    [Task]
+    bool IsAggro()
+    {
+        return true;
+    }
+
+    [Task]
+    bool IsHardAggro()
+    {
+        return true;
+    }
+
+    [Task]
+    bool IsReloading()
+    {
+        return true;
+    }
+
+    [Task]
+    bool IsReturning()
+    {
+        return true;
+    }
+
+    [Task]
+    bool IsRetrieving()
+    {
+        return true;
+    }
+
+    [Task]
+    bool MeleeAttack()
+    {
+        return true;
+    }
+
+    [Task]
+    bool RangedAttack()
+    {
+        return true;
+    }
+
+    [Task]
     bool Idle()
     {
         displayText.text = "Idling";

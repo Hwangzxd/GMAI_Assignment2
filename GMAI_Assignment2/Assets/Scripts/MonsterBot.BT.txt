@@ -1,2 +1,9 @@
 tree("Root")
-	Succeed
+	repeat
+		fallback
+			tree("Idle")
+			
+tree("Idle")
+	sequence
+		Display("Waiting for a customer...")
+		Idle

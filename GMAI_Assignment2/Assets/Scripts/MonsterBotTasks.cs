@@ -9,13 +9,17 @@ public class MonsterBotTasks : MonoBehaviour
 {
     public float speed = 5f;
     public Transform[] treasures;
+    public Transform[] waypoints;    
     public Text displayText;
+
+    int waypointIndex;
+    Vector3 target;
 
     private Rigidbody rb;
     private NavMeshAgent navAgent;
     private MonsterBotController monsterBot;
 
-    Transform target;
+    //Transform target;
     GameObject player;
 
     private float stoppingDistance = 0f;
@@ -28,6 +32,33 @@ public class MonsterBotTasks : MonoBehaviour
         monsterBot = GetComponent<MonsterBotController>();
         player = GameObject.FindGameObjectWithTag("Player");
         treasures = monsterBot.treasures;
+
+        UpdateDestination();
+    }
+
+    void Update()
+    {
+        if (Vector3.Distance(transform.position, target) < 1)
+        {
+            IterateWaypointIndex();
+            UpdateDestination();
+        }
+    }
+
+    void UpdateDestination()
+    {
+        target = waypoints[waypointIndex].position;
+        navAgent.SetDestination(target);
+    }
+
+    void IterateWaypointIndex()
+    {
+        waypointIndex++;
+
+        if (waypointIndex == waypoints.Length)
+        {
+            waypointIndex = 0;
+        }
     }
 
     [Task]

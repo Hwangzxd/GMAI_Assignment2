@@ -1,9 +1,107 @@
 tree("Root")
 	repeat
 		fallback
-			tree("Idle")
+			tree("Attack")
+			tree("Roaming")
+			
 			
 tree("Idle")
 	sequence
 		Display("Waiting for a customer...")
 		Idle
+
+
+tree("Guarding")
+	//While no enemy is spotted,
+	//Look around randomly.
+	while
+		sequence
+			not HasEnemy
+			not Acquire_Enemy
+
+		repeat
+			sequence
+				random
+					SetTarget_Angle(90.0)
+					SetTarget_Angle(-90.0)
+					SetTarget_Angle(135.0)
+					SetTarget_Angle(-135.0)
+				AimAt_Target
+				WaitRandom(0.5, 2.0)
+
+
+tree("Roaming")
+	while
+		sequence
+			not HasEnemy
+			not Acquire_Enemy
+
+		repeat
+			sequence
+				SetDestination_Waypoint
+				SetTarget_Destination
+				AimAt_Target
+				MoveTo_Destination
+				Wait(0.3)
+				NextWaypoint
+
+
+tree("Attack")
+	fallback
+
+		//Attack the enemy if visible.
+		repeat
+			sequence
+				IsVisible_Enemy
+				Stop
+				Wait(0.5)
+				SetTarget_Enemy
+				AimAt_Target
+				tree("Fire")
+
+		//Otherwise forget about it.
+		sequence
+			Clear_Enemy
+			Fail
+
+
+tree("ChaseEnemy")
+	while HasEnemy
+		fallback
+			while not IsVisible_Enemy
+				parallel
+					repeat
+						sequence
+                            WaitRandom(0.5, 1.0)
+							tree("Fire")
+
+					repeat
+						sequence
+							SetDestination_Enemy
+							MoveTo_Destination
+
+					sequence
+						Wait(5.0)
+						Fail
+			tree("SearchAround")
+
+
+tree("SearchAround")
+	while
+		sequence
+			not IsVisible_Enemy
+			Wait(0.5)
+
+		sequence
+			repeat(4)
+				sequence
+					SetDestination_Random(5.0)
+					MoveTo_Destination
+					Wait(0.5)
+			Clear_Enemy
+
+
+tree("Fire")
+	sequence
+		Wait(0.3)
+		Fire

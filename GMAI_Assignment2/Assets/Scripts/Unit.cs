@@ -147,42 +147,6 @@ public class Unit : MonoBehaviour
         WaitArrival();
     }
 
-
-    [Task]
-    public bool SetDestination_Mouse()
-    {
-        var pos = GetMousePosition();
-        SetDestination(pos);
-        return true;
-    }
-
-    [Task]
-    public bool SetDestination_WASD()
-    {
-        bool isSet = false;
-        Vector3 dir = Vector3.zero;
-
-        if (Input.GetKey(KeyCode.W))
-            dir += Vector3.forward;
-        if (Input.GetKey(KeyCode.A))
-            dir += Vector3.left;
-        if (Input.GetKey(KeyCode.S))
-            dir += Vector3.back;
-        if (Input.GetKey(KeyCode.D))
-            dir += Vector3.right;
-
-        if (dir.magnitude > 0.0f)
-        {
-            var pos = this.transform.position + dir.normalized;
-            SetDestination(pos);
-            isSet = true;
-        }
-
-
-        return isSet;
-    }
-
-
     [Task]
     public bool Stop()
     {

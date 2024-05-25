@@ -2,13 +2,21 @@ using Panda;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
+using static Cinemachine.CinemachineFreeLook;
 
 public class MonsterBotController : MonoBehaviour
 {
-    //public GameObject player;
-    //public Transform[] treasures;
+    public Transform[] treasures;
     public Transform nest;
     public WaypointPath waypointPath;
+
+    //private Rigidbody rb;
+    //private NavMeshAgent navAgent;
+    //private MonsterBotController robot;
+
+    //Transform target;
+    //GameObject player;
 
     Unit self;
     int waypointIndex;
@@ -98,4 +106,5 @@ public class MonsterBotController : MonoBehaviour
             return i;
         }
     }
+
 }

@@ -14,6 +14,18 @@ public class AI : MonoBehaviour
 
     Vector3 enemyLastSeenPosition;
 
+    [SerializeField]
+    GameObject treasurePrefab; // Reference to the target object prefab
+
+    List<GameObject> treasures = new List<GameObject>();
+
+    // Use this for initialization
+    void Start()
+    {
+        self = this.GetComponent<Unit>();
+        vision = this.GetComponentInChildren<AIVision>();
+    }
+
     [Task]
     bool SetTarget_Enemy()
     {
@@ -104,6 +116,7 @@ public class AI : MonoBehaviour
     }
 
     float lastSeenTime = float.NegativeInfinity;
+
     [Task]
     bool IsVisible_Enemy()
     {
@@ -158,139 +171,35 @@ public class AI : MonoBehaviour
     }
 
     [Task]
-    bool IsThereLineOfSight_Attacker_Destination()
+    bool IsVisible_Treasure()
     {
-        bool hasLoS = false;
-        var attacker = self.shotBy != null ? self.shotBy : enemy;
-        if (attacker != null)
+        // Iterate through the list of visible objects
+        foreach (var v in vision.visibles)
         {
-            var ignoreList = new List<GameObject>() { this.gameObject, attacker.gameObject };
-            var src = attacker.transform.position;
-            var dst = self.destination;
-            hasLoS = HasLoS(src, dst, ignoreList);
+            // Check if the visible object is a treasure (replace "Treasure" with the tag or name of your treasure objects)
+            if (v != null && v.CompareTag("Treasure"))
+            {
+                // If a treasure is found, return true
+                return true;
+            }
         }
-        return hasLoS;
+
+        // If no treasure is found among visible objects, return false
+        return false;
     }
 
     [Task]
-    bool LastBulletSeenTime_LessThan(float duration)
+    bool SetDestination_Treasure()
     {
-        float t = Time.time - vision.lastBulletSeenTime;
-        if (Task.isInspected)
-            Task.current.debugInfo = string.Format("t={0:0.00}", t);
-        return t < duration;
-    }
-
-    bool HasLoS(Vector3 source, Vector3 destination, List<GameObject> ignoreList)
-    {
-        bool hasLos = true;
-        var delta = (destination - source);
-        var ray = new Ray(source, delta.normalized);
-        var hits = Physics.RaycastAll(ray, delta.magnitude);
-        foreach (var hit in hits)
+        foreach (var obj in treasures)
         {
-            var type = hit.collider.GetComponent<TriggerType>();
-            if (type == null || !type.collidesWithBullet)
-                continue;
-
-            var go = hit.collider.attachedRigidbody != null ? hit.collider.attachedRigidbody.gameObject : hit.collider.gameObject;
-            if (!ignoreList.Contains(go) && Vector3.Distance(hit.point, destination) > 2.0f)
+            if (obj != null && vision.visibles.Contains(obj))
             {
-                hasLos = false;
-                break;
+                self.SetDestination(obj.transform.position);
+                return true;
             }
         }
-        return hasLos;
-    }
-
-    [Task]
-    bool SetDestination_Cover()
-    {
-        // Search for a cover where the enemy has no line of sight.
-
-        var possibleCovers = new List<Vector3>();
-        float searchRadius = 3.0f;
-
-        int n = 20; // Maxiumum number of candidate cover points.
-        int s = 10; // Number of sample per circle
-
-        bool isSet = false;
-
-        var attacker = self.shotBy != null ? self.shotBy : enemy;
-
-        if (attacker != null)
-        {
-
-            // Sample random cover points on an increasing circle.
-            var src = attacker.transform.position;
-            var pos = this.transform.position;
-            var ignoreList = new List<GameObject>() { this.gameObject, attacker.gameObject };
-            while (possibleCovers.Count < n)
-            {
-                for (int i = 0; i < s; i++)
-                {
-                    float a = Random.value * Mathf.PI * 2.0f;
-                    var dst = pos + new Vector3(Mathf.Cos(a), 0.0f, Mathf.Sin(a)) * searchRadius;
-
-                    if (!HasLoS(src, dst, ignoreList))
-                        possibleCovers.Add(dst);
-
-                }
-                searchRadius += 2.0f;
-            }
-
-            // Search the closest cover point
-            UnityEngine.AI.NavMeshPath selfPath = new UnityEngine.AI.NavMeshPath();
-            UnityEngine.AI.NavMeshPath attackerPath = new UnityEngine.AI.NavMeshPath();
-            Vector3 closest = pos;
-            float minD = float.PositiveInfinity;
-            foreach (var p in possibleCovers)
-            {
-                if (self.navMeshAgent.CalculatePath(p, selfPath) && selfPath.status == UnityEngine.AI.NavMeshPathStatus.PathComplete)
-                {
-                    float attackerDistance = 0.0f;
-                    if (attacker != null && attacker.navMeshAgent != null && attacker.navMeshAgent.CalculatePath(p, attackerPath))
-                        attackerDistance = PathLength(attackerPath);
-
-                    float d = PathLength(selfPath) - attackerDistance * 0.1f;
-                    if (d < minD)
-                    {
-                        minD = d;
-                        closest = p;
-                    }
-                }
-            }
-
-            self.SetDestination(closest);
-            isSet = true;
-        }
-
-        return isSet;
-
-    }
-
-    static float PathLength(UnityEngine.AI.NavMeshPath path)
-    {
-        float d = float.PositiveInfinity;
-
-        if (path != null && path.corners.Length > 1)
-        {
-            d = 0.0f;
-            for (int i = 0; i < path.corners.Length - 1; i++)
-            {
-                var p0 = path.corners[i + 0];
-                var p1 = path.corners[i + 1];
-                d += Vector3.Distance(p1, p0);
-            }
-        }
-        return d;
-    }
-
-    // Use this for initialization
-    void Start()
-    {
-        self = this.GetComponent<Unit>();
-        vision = this.GetComponentInChildren<AIVision>();
+        return false;
     }
 
 }

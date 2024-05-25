@@ -1,0 +1,13 @@
+//This Behaviour Tree controls a unit using the player inputs.
+
+tree("Root")
+	repeat
+		fallback
+			tree("Die")
+
+
+tree("Die")
+	//Die when there is nore more HP.
+	sequence
+		IsHealthLessThan(0.1)
+		Explode

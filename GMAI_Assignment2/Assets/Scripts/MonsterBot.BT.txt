@@ -1,19 +1,14 @@
 tree("Root")
 	repeat
 		fallback
-			tree("Attack")
+			sequence
+				not Ammo_LessThan(3)
+				tree("Attack")
+			tree("Reload")
 			tree("Roaming")
-			
-			
-tree("Idle")
-	sequence
-		Display("Waiting for a customer...")
-		Idle
 
 
 tree("Guarding")
-	//While no enemy is spotted,
-	//Look around randomly.
 	while
 		sequence
 			not HasEnemy
@@ -31,38 +26,58 @@ tree("Guarding")
 
 
 tree("Roaming")
+	//While no enemy is spotted,
+	//follow the assigned waypoints.
 	while
 		sequence
 			not HasEnemy
 			not Acquire_Enemy
 
 		repeat
-			sequence
-				SetDestination_Waypoint
-				SetTarget_Destination
-				AimAt_Target
-				MoveTo_Destination
-				Wait(0.3)
-				NextWaypoint
+			fallback
+				sequence
+					IsVisible_Treasure
+					tree("GoToTreasure")
+				sequence
+					SetDestination_Waypoint
+					SetTarget_Destination
+					AimAt_Target
+					MoveTo_Destination
+					Wait(0.3)
+					NextWaypoint
 
 
 tree("Attack")
 	fallback
-
-		//Attack the enemy if visible.
 		repeat
 			sequence
 				IsVisible_Enemy
+				HasAmmo
 				Stop
 				Wait(0.5)
 				SetTarget_Enemy
 				AimAt_Target
 				tree("Fire")
-
-		//Otherwise forget about it.
 		sequence
 			Clear_Enemy
 			Fail
+
+
+tree("FireOnSight")
+	sequence
+		IsVisible_Enemy
+		Stop
+		while IsVisible_Enemy
+			repeat
+				sequence
+					SetTarget_Enemy
+					AimAt_Target
+					tree("Fire")
+
+					//When no more ammo, run for cover sometimes
+					random
+						Succeed
+						HasAmmo
 
 
 tree("ChaseEnemy")
@@ -74,12 +89,10 @@ tree("ChaseEnemy")
 						sequence
                             WaitRandom(0.5, 1.0)
 							tree("Fire")
-
 					repeat
 						sequence
 							SetDestination_Enemy
 							MoveTo_Destination
-
 					sequence
 						Wait(5.0)
 						Fail
@@ -91,7 +104,6 @@ tree("SearchAround")
 		sequence
 			not IsVisible_Enemy
 			Wait(0.5)
-
 		sequence
 			repeat(4)
 				sequence
@@ -101,7 +113,30 @@ tree("SearchAround")
 			Clear_Enemy
 
 
+tree("Idle")
+	sequence
+		WaitRandom(1.0, 5.0)
+		tree("Roaming")
+
+
 tree("Fire")
 	sequence
 		Wait(0.3)
 		Fire
+
+
+tree("Reload")
+	while Ammo_LessThan(3)
+		sequence
+			not HasAmmo
+			Stop
+			Wait(2.0)
+			Succeed
+
+
+// New task to check for treasure and set destination
+tree("GoToTreasure")
+    sequence
+        IsVisible_Treasure
+        SetDestination_Treasure
+        Succeed

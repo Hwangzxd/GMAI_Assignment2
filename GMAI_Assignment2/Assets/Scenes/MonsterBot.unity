@@ -949,15 +949,14 @@ GameObject:
   - component: {fileID: 564711437}
   - component: {fileID: 564711444}
   - component: {fileID: 564711443}
-  - component: {fileID: 564711445}
+  - component: {fileID: 564711447}
+  - component: {fileID: 564711448}
+  - component: {fileID: 564711446}
+  - component: {fileID: 564711441}
   - component: {fileID: 564711436}
   - component: {fileID: 564711435}
   - component: {fileID: 564711434}
   - component: {fileID: 564711440}
-  - component: {fileID: 564711441}
-  - component: {fileID: 564711447}
-  - component: {fileID: 564711448}
-  - component: {fileID: 564711446}
   m_Layer: 9
   m_Name: MonsterBot
   m_TagString: Untagged
@@ -1117,6 +1116,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9f36a998f45243478fb9e39bdc7f13a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  treasures: []
   nest: {fileID: 777881792}
   waypointPath: {fileID: 1215654866}
 --- !u!114 &564711444
@@ -1141,22 +1141,6 @@ MonoBehaviour:
     breakPointStatuses: 
     collapsedLines: 
     btScript: 
---- !u!114 &564711445
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 564711433}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 969568f82c41d4f469fc39e78bda70c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 5
-  treasures: []
-  displayText: {fileID: 162020786}
-  playerActive: 1
 --- !u!114 &564711446
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1213,6 +1197,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cca93beb94267a4baf9d5b5519c1f67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  treasurePrefab: {fileID: 8806054688262755394, guid: 9b2e89b11bb9ffe4c8ffaeb9c41d58e0, type: 3}
 --- !u!1 &637899113
 GameObject:
   m_ObjectHideFlags: 0
@@ -1582,8 +1567,9 @@ GameObject:
   - component: {fileID: 794817137}
   - component: {fileID: 794817142}
   - component: {fileID: 794817146}
+  - component: {fileID: 794817147}
   - component: {fileID: 794817141}
-  - component: {fileID: 794817143}
+  - component: {fileID: 794817148}
   - component: {fileID: 794817145}
   - component: {fileID: 794817144}
   m_Layer: 8
@@ -1723,20 +1709,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &794817143
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 794817136}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3ef6a3dce66971419b5bdceeeb2d006, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 10
-  currentHealth: 0
 --- !u!114 &794817144
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1808,6 +1780,40 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &794817147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 794817136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17e43e7170fb45b4b81dcd16d0ff55d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scripts:
+  - {fileID: 4900000, guid: 8d86ac52d0be5a14297ccf5b30b79a56, type: 3}
+  autoReset: 1
+  tickOn: 0
+  sourceInfos:
+  - isFoldout: 1
+    breakPoints: 
+    breakPointStatuses: 
+    collapsedLines: 
+    btScript: 
+--- !u!114 &794817148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 794817136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3ef6a3dce66971419b5bdceeeb2d006, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &853712661
 GameObject:
   m_ObjectHideFlags: 0

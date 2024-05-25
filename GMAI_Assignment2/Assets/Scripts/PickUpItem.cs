@@ -22,12 +22,37 @@ public class PickUpItem : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        player = GameObject.Find("Player").transform;
-        ObjectGrabPoint = GameObject.Find("ObjectGrabPoint").transform;
+        //player = GameObject.Find("Player").transform;
+        //ObjectGrabPoint = GameObject.Find("ObjectGrabPoint").transform;
+
+        var playerObj = GameObject.Find("Player");
+        if (playerObj != null)
+        {
+            player = playerObj.transform;
+            Player.OnPlayerDestroyed += OnPlayerDestroyed; // Subscribe to the event
+        }
+
+        var objectGrabPointObj = GameObject.Find("ObjectGrabPoint");
+        if (objectGrabPointObj != null)
+        {
+            ObjectGrabPoint = objectGrabPointObj.transform;
+        }
+    }
+
+    void OnDestroy()
+    {
+        // Unsubscribe from the event to prevent memory leaks
+        Player.OnPlayerDestroyed -= OnPlayerDestroyed;
     }
 
     void Update()
     {
+        if (player == null || ObjectGrabPoint == null)
+        {
+            // Player or ObjectGrabPoint has been destroyed, so stop further processing
+            return;
+        }
+
         if (Input.GetKey(KeyCode.E) && itemIsPicked == true && readyToThrow)
         {
             forceMulti += 300 * Time.deltaTime;
@@ -66,6 +91,21 @@ public class PickUpItem : MonoBehaviour
             }
 
             forceMulti = 0;
+        }
+    }
+
+    private void OnPlayerDestroyed()
+    {
+        if (itemIsPicked)
+        {
+            // Detach the item from the player
+            this.transform.parent = null;
+            GetComponent<Rigidbody>().useGravity = true;
+            GetComponent<BoxCollider>().enabled = true;
+
+            itemIsPicked = false;
+            forceMulti = 0;
+            readyToThrow = false;
         }
     }
 }

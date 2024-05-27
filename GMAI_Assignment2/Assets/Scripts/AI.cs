@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using Panda;
+using Panda.Examples.PlayTag;
 
 public class AI : MonoBehaviour
 {
@@ -19,11 +20,21 @@ public class AI : MonoBehaviour
 
     List<GameObject> treasures = new List<GameObject>();
 
+    Transform nest;
+    Transform ObjectGrabPointBot;
+
     // Use this for initialization
     void Start()
     {
         self = this.GetComponent<Unit>();
         vision = this.GetComponentInChildren<AIVision>();
+        nest = GameObject.Find("Nest").transform;
+
+        var objectGrabPointObjBot = GameObject.Find("ObjectGrabPointBot");
+        if (objectGrabPointObjBot != null)
+        {
+            ObjectGrabPointBot = objectGrabPointObjBot.transform;
+        }
     }
 
     [Task]
@@ -191,13 +202,36 @@ public class AI : MonoBehaviour
     [Task]
     bool SetDestination_Treasure()
     {
-        foreach (var obj in treasures)
+        foreach (var v in vision.visibles)
         {
-            if (obj != null && vision.visibles.Contains(obj))
+            if (v != null && v.CompareTag("Treasure"))
             {
-                self.SetDestination(obj.transform.position);
+                self.SetDestination(v.transform.position);
                 return true;
             }
+        }
+
+        return false;
+    }
+
+    //[Task]
+    //bool PickUpTreasure()
+    //{
+    //    if (ObjectGrabPointBot.childCount > 1)
+    //    {
+    //        return true;
+    //    }
+
+    //    return false;
+    //}
+
+    [Task]
+    bool ReturnToNest()
+    {
+        if (nest != null && ObjectGrabPointBot.childCount > 1)
+        {
+            self.SetDestination(nest.position);
+            return true;
         }
         return false;
     }

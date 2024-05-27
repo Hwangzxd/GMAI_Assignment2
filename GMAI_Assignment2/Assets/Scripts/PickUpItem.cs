@@ -9,9 +9,12 @@ using UnityEngine;
 public class PickUpItem : MonoBehaviour
 {
     private Transform ObjectGrabPoint;
+    private Transform ObjectGrabPointBot;
     private Transform player;
+    private Transform monsterBot;
 
     public float pickUpDistance;
+    public float pickUpDistanceBot;
     public float forceMulti;
 
     public bool readyToThrow;
@@ -32,10 +35,22 @@ public class PickUpItem : MonoBehaviour
             Player.OnPlayerDestroyed += OnPlayerDestroyed; // Subscribe to the event
         }
 
+        var botObj = GameObject.Find("MonsterBot");
+        if (botObj != null)
+        {
+            monsterBot = botObj.transform;
+        }
+
         var objectGrabPointObj = GameObject.Find("ObjectGrabPoint");
         if (objectGrabPointObj != null)
         {
             ObjectGrabPoint = objectGrabPointObj.transform;
+        }
+
+        var objectGrabPointObjBot = GameObject.Find("ObjectGrabPointBot");
+        if (objectGrabPointObjBot != null)
+        {
+            ObjectGrabPointBot = objectGrabPointObjBot.transform;
         }
     }
 
@@ -68,6 +83,22 @@ public class PickUpItem : MonoBehaviour
                 GetComponent<BoxCollider>().enabled = false;
                 this.transform.position = ObjectGrabPoint.position;
                 this.transform.parent = GameObject.Find("ObjectGrabPoint").transform;
+
+                itemIsPicked = true;
+                forceMulti = 0;
+            }
+        }
+
+        pickUpDistanceBot = Vector3.Distance(monsterBot.position, transform.position);
+
+        if (pickUpDistanceBot <= 2)
+        {
+            if (itemIsPicked == false && ObjectGrabPointBot.childCount < 1)
+            {
+                GetComponent<Rigidbody>().useGravity = false;
+                GetComponent<BoxCollider>().enabled = false;
+                this.transform.position = ObjectGrabPointBot.position;
+                this.transform.parent = GameObject.Find("ObjectGrabPointBot").transform;
 
                 itemIsPicked = true;
                 forceMulti = 0;

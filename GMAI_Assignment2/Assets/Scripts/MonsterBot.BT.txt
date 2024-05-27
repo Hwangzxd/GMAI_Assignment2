@@ -136,7 +136,6 @@ tree("Reload")
 
 // New task to check for treasure and set destination
 tree("GoToTreasure")
-    sequence
-        IsVisible_Treasure
-        SetDestination_Treasure
-        Succeed
+	sequence
+		SetDestination_Treasure
+		ReturnToNest

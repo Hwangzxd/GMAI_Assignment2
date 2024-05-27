@@ -148,6 +148,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pickUpDistance: 2
+  pickUpDistanceBot: 2
   forceMulti: 0
   readyToThrow: 0
   itemIsPicked: 0

@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using Panda;
-using Panda.Examples.PlayTag;
+using UnityEngine.AI;
 
 public class AI : MonoBehaviour
 {
@@ -23,12 +23,19 @@ public class AI : MonoBehaviour
     Transform nest;
     Transform ObjectGrabPointBot;
 
-    // Use this for initialization
+    private float stoppingDistance = 0f;
+    public bool returnedToNest;
+
+    [HideInInspector]
+    public UnityEngine.AI.NavMeshAgent navMeshAgent;
+
     void Start()
     {
         self = this.GetComponent<Unit>();
         vision = this.GetComponentInChildren<AIVision>();
         nest = GameObject.Find("Nest").transform;
+
+        navMeshAgent = GetComponent<NavMeshAgent>();
 
         var objectGrabPointObjBot = GameObject.Find("ObjectGrabPointBot");
         if (objectGrabPointObjBot != null)
@@ -200,40 +207,51 @@ public class AI : MonoBehaviour
     }
 
     [Task]
-    bool SetDestination_Treasure()
+    void SetDestination_Treasure()
     {
         foreach (var v in vision.visibles)
         {
             if (v != null && v.CompareTag("Treasure"))
             {
                 self.SetDestination(v.transform.position);
-                return true;
             }
+        }
+
+        navMeshAgent.stoppingDistance = 1f;
+
+        if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
+        {
+            Task.current.Succeed();
+        }
+
+    }
+
+    [Task]
+    bool PickedUpTreasure()
+    {
+        if (ObjectGrabPointBot.childCount > 1)
+        {
+            return true;
         }
 
         return false;
     }
 
-    //[Task]
-    //bool PickUpTreasure()
-    //{
-    //    if (ObjectGrabPointBot.childCount > 1)
-    //    {
-    //        return true;
-    //    }
-
-    //    return false;
-    //}
-
     [Task]
-    bool ReturnToNest()
+    void SetDestination_Nest()
     {
-        if (nest != null && ObjectGrabPointBot.childCount > 1)
+        if (nest != null)
         {
             self.SetDestination(nest.position);
-            return true;
         }
-        return false;
+
+        navMeshAgent.stoppingDistance = 1f;
+
+        if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
+        {
+            Task.current.Succeed();
+            returnedToNest = true;
+        }
     }
 
 }

@@ -236,7 +236,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -1198,6 +1198,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   treasurePrefab: {fileID: 8806054688262755394, guid: 9b2e89b11bb9ffe4c8ffaeb9c41d58e0, type: 3}
+  returnedToNest: 0
+  navMeshAgent: {fileID: 0}
 --- !u!1 &637899113
 GameObject:
   m_ObjectHideFlags: 0
@@ -2406,7 +2408,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2791991482409242644, guid: 9b2e89b11bb9ffe4c8ffaeb9c41d58e0, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4.74
+      value: -5
       objectReference: {fileID: 0}
     - target: {fileID: 2791991482409242644, guid: 9b2e89b11bb9ffe4c8ffaeb9c41d58e0, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2414,7 +2416,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2791991482409242644, guid: 9b2e89b11bb9ffe4c8ffaeb9c41d58e0, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -12.65
+      value: -9.35
       objectReference: {fileID: 0}
     - target: {fileID: 2791991482409242644, guid: 9b2e89b11bb9ffe4c8ffaeb9c41d58e0, type: 3}
       propertyPath: m_LocalRotation.w

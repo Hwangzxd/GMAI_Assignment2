@@ -49,9 +49,6 @@ public class Bullet : MonoBehaviour
         }
     }
 
-
-
-
     void OnHit(Unit target)
     {
         if (target != null && target != shooter)
@@ -60,13 +57,13 @@ public class Bullet : MonoBehaviour
             {
                 var shotBy = this.shooter.GetComponent<Unit>();
                 target.shotBy = shotBy;
-                target.lastShotTime = Time.time;
+                //target.lastShotTime = Time.time;
 
-                if (shotBy != null)
-                {
-                    shotBy.lastHit = target;
-                    shotBy.lastHitTime = Time.time;
-                }
+                //if (shotBy != null)
+                //{
+                //    shotBy.lastHit = target;
+                //    shotBy.lastHitTime = Time.time;
+                //}
             }
 
             target.health -= damage;
@@ -75,7 +72,6 @@ public class Bullet : MonoBehaviour
 
 
     }
-
 
     void Explode(RaycastHit hit)
     {
@@ -93,8 +89,5 @@ public class Bullet : MonoBehaviour
 
         var rot = Quaternion.FromToRotation(impact.transform.forward, dir);
         impact.transform.rotation = rot * impact.transform.rotation;
-
-
-
     }
 }

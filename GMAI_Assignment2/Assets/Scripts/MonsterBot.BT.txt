@@ -60,56 +60,6 @@ tree("Attack")
 			Fail
 
 
-tree("FireOnSight")
-	sequence
-		IsVisible_Enemy
-		Stop
-		while IsVisible_Enemy
-			repeat
-				sequence
-					SetTarget_Enemy
-					AimAt_Target
-					tree("Fire")
-
-					//When no more ammo, run for cover sometimes
-					random
-						Succeed
-						HasAmmo
-
-
-tree("ChaseEnemy")
-	while HasEnemy
-		fallback
-			while not IsVisible_Enemy
-				parallel
-					repeat
-						sequence
-                            WaitRandom(0.5, 1.0)
-							tree("Fire")
-					repeat
-						sequence
-							SetDestination_Enemy
-							MoveTo_Destination
-					sequence
-						Wait(5.0)
-						Fail
-			tree("SearchAround")
-
-
-tree("SearchAround")
-	while
-		sequence
-			not IsVisible_Enemy
-			Wait(0.5)
-		sequence
-			repeat(4)
-				sequence
-					SetDestination_Random(5.0)
-					MoveTo_Destination
-					Wait(0.5)
-			Clear_Enemy
-
-
 tree("Fire")
 	sequence
 		Wait(0.3)

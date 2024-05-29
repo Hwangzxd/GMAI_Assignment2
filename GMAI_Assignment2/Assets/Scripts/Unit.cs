@@ -7,7 +7,7 @@ public class Unit : MonoBehaviour
     public int team = 0; // Team the unit is in. A unit in a different team is an enemy.
     public float health = 10.0f; // HP
     public GameObject bulletPrefab;
-    public GameObject jammedEffectPrefab;
+    //public GameObject jammedEffectPrefab;
     public float rotationSpeed = 1.0f;
     public float reloadRate = 0.5f; // How many bullet per second get restored.
     public int ammo = 5;
@@ -16,14 +16,14 @@ public class Unit : MonoBehaviour
     [HideInInspector]
     public Unit shotBy; // Last unit that shot this unit.
 
-    [HideInInspector]
-    public float lastShotTime; // Time when the unit has been shot for the last time.
+    //[HideInInspector]
+    //public float lastShotTime; // Time when the unit has been shot for the last time.
 
-    [HideInInspector]
-    public Unit lastHit; // Last unit this unit shot to.
+    //[HideInInspector]
+    //public Unit lastHit; // Last unit this unit shot to.
 
-    [HideInInspector]
-    public float lastHitTime; // Last time this unit hit another unit.
+    //[HideInInspector]
+    //public float lastHitTime; // Last time this unit hit another unit.
 
     [HideInInspector]
     public UnityEngine.AI.NavMeshAgent navMeshAgent;
@@ -35,8 +35,6 @@ public class Unit : MonoBehaviour
     [HideInInspector]
     public float startHealth;
 
-
-
     [HideInInspector]
     public int startAmmo;
 
@@ -46,7 +44,7 @@ public class Unit : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        lastShotTime = lastHitTime = float.NegativeInfinity;
+        //lastShotTime = lastHitTime = float.NegativeInfinity;
 
         navMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         startHealth = health;
@@ -65,15 +63,6 @@ public class Unit : MonoBehaviour
             lastReloadTime = Time.time;
         }
 
-    }
-
-
-    Vector3 GetMousePosition()
-    {
-        var mousePosition = Input.mousePosition;
-        mousePosition.z = -Camera.main.worldToCameraMatrix.MultiplyPoint(this.transform.position).z;
-        var pos = Camera.main.ScreenToWorldPoint(mousePosition);
-        return pos;
     }
 
     #region navigation tasks
@@ -154,14 +143,14 @@ public class Unit : MonoBehaviour
         return true;
     }
 
-    [Task]
-    public bool LastShotTime_LessThan(float duration)
-    {
-        var t = (Time.time - lastShotTime);
-        if (Task.isInspected)
-            Task.current.debugInfo = string.Format("t={0:0.00}", t);
-        return t < duration;
-    }
+    //[Task]
+    //public bool LastShotTime_LessThan(float duration)
+    //{
+    //    var t = (Time.time - lastShotTime);
+    //    if (Task.isInspected)
+    //        Task.current.debugInfo = string.Format("t={0:0.00}", t);
+    //    return t < duration;
+    //}
     #endregion
 
     #region combat tasks
@@ -170,7 +159,7 @@ public class Unit : MonoBehaviour
     public bool Fire()
     {
 
-        var bulletOb = ammo > 0 ? GameObject.Instantiate(bulletPrefab) : GameObject.Instantiate(jammedEffectPrefab);
+        var bulletOb = GameObject.Instantiate(bulletPrefab);
 
         bulletOb.transform.position = this.transform.position;
         bulletOb.transform.rotation = this.transform.rotation;
@@ -199,13 +188,6 @@ public class Unit : MonoBehaviour
     {
         this.target = target;
         this.target.y = this.transform.position.y;
-        return true;
-    }
-
-    [Task]
-    public bool SetTarget_Mouse()
-    {
-        target = GetMousePosition();
         return true;
     }
 

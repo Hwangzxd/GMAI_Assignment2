@@ -15,11 +15,6 @@ public class AI : MonoBehaviour
 
     Vector3 enemyLastSeenPosition;
 
-    [SerializeField]
-    GameObject treasurePrefab; // Reference to the target object prefab
-
-    List<GameObject> treasures = new List<GameObject>();
-
     Transform nest;
     Transform ObjectGrabPointBot;
 
@@ -82,7 +77,7 @@ public class AI : MonoBehaviour
         {
             enemy = null;
 
-            if (enemy == null && self.shotBy != null && self.shotBy.team != self.team && (Time.time - self.lastShotTime) < 1.0f)
+            if (enemy == null && self.shotBy != null && self.shotBy.team != self.team)
                 enemy = self.shotBy;
 
             if (enemy == null && vision.visibles != null)

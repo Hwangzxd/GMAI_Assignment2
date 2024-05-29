@@ -1170,15 +1170,11 @@ MonoBehaviour:
   team: 1
   health: 10
   bulletPrefab: {fileID: 124132, guid: a59bb49f2b9393746b8136a8fc0b642c, type: 3}
-  jammedEffectPrefab: {fileID: 145960, guid: 72a7954935a65b84f9fc4a24749e8716, type: 3}
   rotationSpeed: 180
   reloadRate: 0.5
   ammo: 3
   explosionPrefab: {fileID: 198554, guid: 5f9750a8eeeab7b4783274754a321ce4, type: 3}
   shotBy: {fileID: 0}
-  lastShotTime: 0
-  lastHit: {fileID: 0}
-  lastHitTime: 0
   navMeshAgent: {fileID: 0}
   destination: {x: 0, y: 0, z: 0}
   target: {x: 0, y: 0, z: 0}
@@ -1197,7 +1193,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cca93beb94267a4baf9d5b5519c1f67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  treasurePrefab: {fileID: 8806054688262755394, guid: 9b2e89b11bb9ffe4c8ffaeb9c41d58e0, type: 3}
   returnedToNest: 0
   navMeshAgent: {fileID: 0}
 --- !u!1 &637899113
@@ -1740,15 +1735,11 @@ MonoBehaviour:
   team: 0
   health: 10
   bulletPrefab: {fileID: 124132, guid: a59bb49f2b9393746b8136a8fc0b642c, type: 3}
-  jammedEffectPrefab: {fileID: 107286, guid: 0e11ddaeb78dcbb4e91faa90eacfdf15, type: 3}
   rotationSpeed: 1
   reloadRate: 0.5
   ammo: 5
   explosionPrefab: {fileID: 198554, guid: 5f9750a8eeeab7b4783274754a321ce4, type: 3}
   shotBy: {fileID: 0}
-  lastShotTime: 0
-  lastHit: {fileID: 0}
-  lastHitTime: 0
   navMeshAgent: {fileID: 0}
   destination: {x: 0, y: 0, z: 0}
   target: {x: 0, y: 0, z: 0}
@@ -2416,7 +2407,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2791991482409242644, guid: 9b2e89b11bb9ffe4c8ffaeb9c41d58e0, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -9.35
+      value: -8.72
       objectReference: {fileID: 0}
     - target: {fileID: 2791991482409242644, guid: 9b2e89b11bb9ffe4c8ffaeb9c41d58e0, type: 3}
       propertyPath: m_LocalRotation.w

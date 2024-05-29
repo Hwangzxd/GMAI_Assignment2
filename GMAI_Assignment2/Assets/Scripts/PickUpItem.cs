@@ -199,23 +199,23 @@ public class PickUpItem : MonoBehaviour
 
         if (pickUpDistanceBot <= 2)
         {
-            if (itemIsPicked == false && ObjectGrabPointBot.childCount < 1)
+            if (ObjectGrabPointBot.childCount < 1)
             {
                 GetComponent<Rigidbody>().useGravity = false;
                 GetComponent<BoxCollider>().enabled = false;
                 this.transform.position = ObjectGrabPointBot.position;
                 this.transform.parent = GameObject.Find("ObjectGrabPointBot").transform;
 
-                itemIsPicked = true;
-                forceMulti = 0;
+                //itemIsPicked = true;
+                //forceMulti = 0;
             }
         }
 
         if (ai.returnedToNest && itemIsPicked == true)
         {
-            readyToThrow = true;
+            //readyToThrow = true;
 
-            rb.AddForce(monsterBot.transform.forward * 10f);
+            //rb.AddForce(monsterBot.transform.forward * 10f);
             //rb.AddForce(Vector3.down * 10f, ForceMode.Impulse);
             this.transform.parent = null;
             //this.transform.localPosition = Vector3.zero; // Reset local position
@@ -223,9 +223,9 @@ public class PickUpItem : MonoBehaviour
             GetComponent<Rigidbody>().useGravity = true;
             GetComponent<BoxCollider>().enabled = true;
 
-            itemIsPicked = false;
-            forceMulti = 0;
-            readyToThrow = false;
+            //itemIsPicked = false;
+            //forceMulti = 0;
+            //readyToThrow = false;
         }
     }
 

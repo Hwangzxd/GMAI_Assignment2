@@ -1175,6 +1175,9 @@ MonoBehaviour:
   ammo: 3
   explosionPrefab: {fileID: 198554, guid: 5f9750a8eeeab7b4783274754a321ce4, type: 3}
   shotBy: {fileID: 0}
+  lastShotTime: 0
+  lastHit: {fileID: 0}
+  lastHitTime: 0
   navMeshAgent: {fileID: 0}
   destination: {x: 0, y: 0, z: 0}
   target: {x: 0, y: 0, z: 0}
@@ -1740,6 +1743,9 @@ MonoBehaviour:
   ammo: 5
   explosionPrefab: {fileID: 198554, guid: 5f9750a8eeeab7b4783274754a321ce4, type: 3}
   shotBy: {fileID: 0}
+  lastShotTime: 0
+  lastHit: {fileID: 0}
+  lastHitTime: 0
   navMeshAgent: {fileID: 0}
   destination: {x: 0, y: 0, z: 0}
   target: {x: 0, y: 0, z: 0}

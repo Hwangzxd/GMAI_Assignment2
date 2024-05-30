@@ -16,14 +16,14 @@ public class Unit : MonoBehaviour
     [HideInInspector]
     public Unit shotBy; // Last unit that shot this unit.
 
-    //[HideInInspector]
-    //public float lastShotTime; // Time when the unit has been shot for the last time.
+    [HideInInspector]
+    public float lastShotTime; // Time when the unit has been shot for the last time.
 
-    //[HideInInspector]
-    //public Unit lastHit; // Last unit this unit shot to.
+    [HideInInspector]
+    public Unit lastHit; // Last unit this unit shot to.
 
-    //[HideInInspector]
-    //public float lastHitTime; // Last time this unit hit another unit.
+    [HideInInspector]
+    public float lastHitTime; // Last time this unit hit another unit.
 
     [HideInInspector]
     public UnityEngine.AI.NavMeshAgent navMeshAgent;
@@ -44,7 +44,7 @@ public class Unit : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        //lastShotTime = lastHitTime = float.NegativeInfinity;
+        lastShotTime = lastHitTime = float.NegativeInfinity;
 
         navMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         startHealth = health;
@@ -143,14 +143,14 @@ public class Unit : MonoBehaviour
         return true;
     }
 
-    //[Task]
-    //public bool LastShotTime_LessThan(float duration)
-    //{
-    //    var t = (Time.time - lastShotTime);
-    //    if (Task.isInspected)
-    //        Task.current.debugInfo = string.Format("t={0:0.00}", t);
-    //    return t < duration;
-    //}
+    [Task]
+    public bool LastShotTime_LessThan(float duration)
+    {
+        var t = (Time.time - lastShotTime);
+        if (Task.isInspected)
+            Task.current.debugInfo = string.Format("t={0:0.00}", t);
+        return t < duration;
+    }
     #endregion
 
     #region combat tasks

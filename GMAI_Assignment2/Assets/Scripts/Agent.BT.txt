@@ -8,14 +8,22 @@ tree("Root")
 
 tree("Idle")
 	repeat
-		sequence
-			random
-				SetTarget_Angle(90.0)
-				SetTarget_Angle(-90.0)
-				SetTarget_Angle(135.0)
-				SetTarget_Angle(-135.0)
-			AimAt_Target
-			WaitRandom(0.5, 2.0)
+		fallback
+			sequence
+				IsVisible_Player
+				PlayerHasMarkedTreasure
+				tree("Chase")
+			sequence 
+				IsVisible_Player
+				tree("Attack")
+			sequence
+				random
+					SetTarget_Angle(90.0)
+					SetTarget_Angle(-90.0)
+					SetTarget_Angle(135.0)
+					SetTarget_Angle(-135.0)
+				AimAt_Target
+				Wait(2.0)
 
 
 tree("Roaming")
@@ -31,7 +39,7 @@ tree("Roaming")
 				MoveTo_Destination
 				Wait(0.3)
 				NextWaypoint
-
+		
 
 tree("Attack")
 	fallback
@@ -76,3 +84,15 @@ tree("ReturnToNest")
 		SetDestination_Nest
 		Drop
 		tree("Idle")
+
+
+tree("Chase")
+	repeat
+		sequence
+			SetDestination_Enemy
+			IsVisible_Player
+			HasAmmo
+			Stop
+			Wait(0.5)
+			AimAt_Target
+			tree("Fire")

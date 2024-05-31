@@ -16,6 +16,7 @@ public class AI : MonoBehaviour
     //Vector3 enemyLastSeenPosition;
 
     Transform nest;
+    Transform ObjectGrabPoint;
     Transform ObjectGrabPointBot;
 
     private float stoppingDistance = 0f;
@@ -31,6 +32,12 @@ public class AI : MonoBehaviour
         nest = GameObject.Find("Nest").transform;
 
         navMeshAgent = GetComponent<NavMeshAgent>();
+
+        var objectGrabPointObj = GameObject.Find("ObjectGrabPoint");
+        if (objectGrabPointObj != null)
+        {
+            ObjectGrabPoint = objectGrabPointObj.transform;
+        }
 
         var objectGrabPointObjBot = GameObject.Find("ObjectGrabPointBot");
         if (objectGrabPointObjBot != null)
@@ -145,16 +152,23 @@ public class AI : MonoBehaviour
     }
 
     [Task]
-    bool SetDestination_Enemy()
+    void SetDestination_Enemy()
     {
-        bool succeeded = false;
+        //bool succeeded = false;
 
         if (enemy != null)
         {
             self.SetDestination(enemy.transform.position);
-            succeeded = true;
+            //succeeded = true;
         }
-        return succeeded;
+        //return succeeded;
+
+        navMeshAgent.stoppingDistance = 1f;
+
+        if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
+        {
+            Task.current.Succeed();
+        }
     }
 
     [Task]
@@ -275,6 +289,23 @@ public class AI : MonoBehaviour
         }
 
         Task.current.Succeed();
+    }
+
+    [Task]
+    public bool PlayerHasMarkedTreasure()
+    {
+        if (ObjectGrabPoint.childCount >= 1)
+        {
+            foreach (Transform child in ObjectGrabPoint)
+            {
+                if (child.tag == "Marked")
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
 }

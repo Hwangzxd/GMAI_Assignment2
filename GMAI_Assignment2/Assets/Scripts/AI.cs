@@ -13,7 +13,7 @@ public class AI : MonoBehaviour
 
     float random_destination_radius = 1.0f;
 
-    //Vector3 enemyLastSeenPosition;
+    Vector3 enemyLastSeenPosition;
 
     Transform nest;
     Transform ObjectGrabPoint;
@@ -57,16 +57,16 @@ public class AI : MonoBehaviour
         return false;
     }
 
-    //[Task]
-    //bool SetTarget_EnemyLastSeenPosition()
-    //{
-    //    if (enemy != null)
-    //    {
-    //        self.SetTarget(enemyLastSeenPosition);
-    //        return true;
-    //    }
-    //    return false;
-    //}
+    [Task]
+    bool SetTarget_EnemyLastSeenPosition()
+    {
+        if (enemy != null)
+        {
+            self.SetTarget(enemyLastSeenPosition);
+            return true;
+        }
+        return false;
+    }
 
     [Task]
     bool SetTarget_Angle(float angle)
@@ -76,57 +76,57 @@ public class AI : MonoBehaviour
         return true;
     }
 
-    //float lastEnemyAcquisitionTime = float.NegativeInfinity;
-    //[Task]
-    //void Acquire_Enemy()
-    //{
-    //    if (Time.time - lastEnemyAcquisitionTime > 0.5f)
-    //    {
-    //        enemy = null;
+    float lastEnemyAcquisitionTime = float.NegativeInfinity;
+    [Task]
+    void Acquire_Enemy()
+    {
+        if (Time.time - lastEnemyAcquisitionTime > 0.5f)
+        {
+            enemy = null;
 
-    //        if (enemy == null && self.shotBy != null && self.shotBy.team != self.team)
-    //            enemy = self.shotBy;
+            if (enemy == null && self.shotBy != null && self.shotBy.team != self.team)
+                enemy = self.shotBy;
 
-    //        if (enemy == null && vision.visibles != null)
-    //        {
-    //            foreach (var v in vision.visibles)
-    //            {
-    //                if (v == null)
-    //                    continue;
+            if (enemy == null && vision.visibles != null)
+            {
+                foreach (var v in vision.visibles)
+                {
+                    if (v == null)
+                        continue;
 
-    //                var shooter = v.GetComponent<Unit>();
+                    var shooter = v.GetComponent<Unit>();
 
-    //                if (shooter == null)
-    //                {
-    //                    var bullet = v.GetComponent<Bullet>();
-    //                    shooter = bullet != null && bullet.shooter != null ? bullet.shooter.GetComponent<Unit>() : null;
+                    if (shooter == null)
+                    {
+                        var bullet = v.GetComponent<Bullet>();
+                        shooter = bullet != null && bullet.shooter != null ? bullet.shooter.GetComponent<Unit>() : null;
 
-    //                    if (shooter != null && self.team == shooter.team)
-    //                        shooter = null;
-    //                }
+                        if (shooter != null && self.team == shooter.team)
+                            shooter = null;
+                    }
 
-    //                if (shooter != null && shooter.team != self.team)
-    //                {
-    //                    enemy = shooter;
-    //                    break;
-    //                }
-    //            }
-    //        }
-    //        lastEnemyAcquisitionTime = Time.time;
-    //    }
+                    if (shooter != null && shooter.team != self.team)
+                    {
+                        enemy = shooter;
+                        break;
+                    }
+                }
+            }
+            lastEnemyAcquisitionTime = Time.time;
+        }
 
-    //    Task.current.Complete(enemy != null);
+        Task.current.Complete(enemy != null);
 
-    //}
+    }
 
-    //[Task]
-    //bool HasAmmo_Ememy()
-    //{
-    //    bool has = false;
-    //    if (enemy != null)
-    //        has = enemy.ammo > 0;
-    //    return has;
-    //}
+    [Task]
+    bool HasAmmo_Ememy()
+    {
+        bool has = false;
+        if (enemy != null)
+            has = enemy.ammo > 0;
+        return has;
+    }
 
     [Task]
     bool Clear_Enemy()
@@ -135,7 +135,7 @@ public class AI : MonoBehaviour
         return true;
     }
 
-    //float lastSeenTime = float.NegativeInfinity;
+    float lastSeenTime = float.NegativeInfinity;
 
     [Task]
     bool IsVisible_Player()
@@ -186,11 +186,11 @@ public class AI : MonoBehaviour
         return true;
     }
 
-    //[Task]
-    //bool HasEnemy()
-    //{
-    //    return enemy != null;
-    //}
+    [Task]
+    bool HasEnemy()
+    {
+        return enemy != null;
+    }
 
     [Task]
     bool IsVisible_Treasure()

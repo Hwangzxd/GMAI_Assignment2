@@ -1,21 +1,21 @@
 tree("Root")
 	repeat
 		fallback
+			tree("GoToTreasure")
 			tree("Reload")
 			tree("Attack")
-			tree("Roaming")
+			random
+				tree("Roaming")
+				tree("Idle")
 
 
 tree("Idle")
-	repeat
-		fallback
-			sequence
-				IsVisible_Player
-				PlayerHasMarkedTreasure
-				tree("Chase")
-			sequence 
-				IsVisible_Player
-				tree("Attack")
+	while
+		sequence
+			not IsVisible_Treasure
+			not HasEnemy
+			not Acquire_Enemy
+		repeat 2
 			sequence
 				random
 					SetTarget_Angle(90.0)
@@ -27,11 +27,11 @@ tree("Idle")
 
 
 tree("Roaming")
-	repeat
-		fallback
-			sequence
-				IsVisible_Treasure
-				tree("GoToTreasure")
+	while 
+		sequence
+			not IsVisible_Treasure
+			not IsVisible_Player
+		repeat 2
 			sequence
 				SetDestination_Waypoint
 				SetTarget_Destination
@@ -49,6 +49,7 @@ tree("Attack")
 				HasAmmo
 				Stop
 				Wait(0.5)
+				SetTarget_Enemy
 				AimAt_Target
 				tree("Fire")
 		sequence
@@ -71,9 +72,9 @@ tree("Reload")
 			Succeed
 
 
-// New task to check for treasure and set destination
 tree("GoToTreasure")
 	sequence
+		IsVisible_Treasure
 		SetDestination_Treasure
 		PickUp
 		tree("ReturnToNest")
@@ -96,3 +97,20 @@ tree("Chase")
 			Wait(0.5)
 			AimAt_Target
 			tree("Fire")
+
+
+tree("ChaseEnemy")
+	fallback
+		while not IsVisible_Player
+			parallel
+				repeat
+					sequence
+                        HasAmmo
+						Stop
+						Wait(0.5)
+						AimAt_Target
+						tree("Fire")
+				repeat
+					sequence
+						SetDestination_Enemy
+						MoveTo_Destination

@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 using Panda;
 
+// Code taken from PandaBT plugin "Shooter" example project
+
 public class WaypointPath : MonoBehaviour
 {
     public bool loop;
@@ -20,24 +22,24 @@ public class WaypointPath : MonoBehaviour
         }
     }
 
-    // Use this for initialization
     void Start()
     {
 
     }
 
-    // Update is called once per frame
     void Update()
     {
 
     }
 
+    // Draw gizmos in the editor to visualize the waypoints and path
     void OnDrawGizmos()
     {
         DrawLines();
         DrawSpheres(0.1f);
     }
 
+    // Draw gizmos in the editor when the object is selected
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.white;
@@ -45,6 +47,7 @@ public class WaypointPath : MonoBehaviour
         DrawSpheres(0.5f);
     }
 
+    // Draw spheres at each waypoint position
     void DrawSpheres(float r)
     {
         var wp = waypoints;
@@ -54,6 +57,7 @@ public class WaypointPath : MonoBehaviour
         }
     }
 
+    // Draw lines between waypoints
     void DrawLines()
     {
         var wp = waypoints;

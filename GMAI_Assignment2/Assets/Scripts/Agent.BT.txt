@@ -119,4 +119,3 @@ tree("ReturnToNest")
 	sequence
 		SetDestination_Nest
 		Drop
-		tree("Idle")

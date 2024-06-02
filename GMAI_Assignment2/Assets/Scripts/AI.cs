@@ -6,13 +6,13 @@ using Panda;
 using UnityEngine.AI;
 using Panda.Examples.PlayTag;
 
+// Code referenced from PandaBT plugin "Shooter" example project
+
 public class AI : MonoBehaviour
 {
     Unit enemy;
     Unit self;
     AIVision vision;
-
-    float random_destination_radius = 1.0f;
 
     Vector3 enemyLastSeenPosition;
 
@@ -20,7 +20,6 @@ public class AI : MonoBehaviour
     Transform ObjectGrabPoint;
     Transform ObjectGrabPointBot;
 
-    private float stoppingDistance = 0f;
     public bool returnedToNest;
 
     [HideInInspector]
@@ -53,17 +52,6 @@ public class AI : MonoBehaviour
         if (enemy != null)
         {
             self.SetTarget(enemy.transform.position);
-            return true;
-        }
-        return false;
-    }
-
-    [Task]
-    bool SetTarget_EnemyLastSeenPosition()
-    {
-        if (enemy != null)
-        {
-            self.SetTarget(enemyLastSeenPosition);
             return true;
         }
         return false;
@@ -121,15 +109,6 @@ public class AI : MonoBehaviour
     }
 
     [Task]
-    bool HasAmmo_Ememy()
-    {
-        bool has = false;
-        if (enemy != null)
-            has = enemy.ammo > 0;
-        return has;
-    }
-
-    [Task]
     bool Clear_Enemy()
     {
         enemy = self.shotBy = null;
@@ -138,35 +117,29 @@ public class AI : MonoBehaviour
 
     float lastSeenTime = float.NegativeInfinity;
 
+    // Task to check if a player is visible
     [Task]
     bool IsVisible_Player()
     {
+        // Iterate through the list of visible objects
         foreach (var v in vision.visibles)
         {
+            // Check if the tag of the visible object is "Player"
             if (v != null && v.CompareTag("Player"))
             {
+                // If a player is found, return true
                 return true;
             }
         }
 
+        // If no player is found, return false
         return false;
     }
 
+    // Task to set the destination to the player's position
     [Task]
     bool SetDestination_Enemy()
     {
-        //if (enemy != null)
-        //{
-        //    self.SetDestination(enemy.transform.position);
-        //}
-
-        //navMeshAgent.stoppingDistance = 1f;
-
-        //if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
-        //{
-        //    Task.current.Succeed();
-        //}
-
         bool succeeded = false;
 
         if (enemy != null)
@@ -178,33 +151,19 @@ public class AI : MonoBehaviour
     }
 
     [Task]
-    bool SetDestination_Random(float radius)
-    {
-        random_destination_radius = radius;
-        return SetDestination_Random();
-    }
-
-    [Task]
-    bool SetDestination_Random()
-    {
-        var dst = this.transform.position + (Random.insideUnitSphere * random_destination_radius);
-        self.SetDestination(dst);
-        return true;
-    }
-
-    [Task]
     bool HasEnemy()
     {
         return enemy != null;
     }
 
+    // Task to check for visible treasure
     [Task]
     bool IsVisible_Treasure()
     {
         // Iterate through the list of visible objects
         foreach (var v in vision.visibles)
         {
-            // Check if the visible object is a treasure (replace "Treasure" with the tag or name of your treasure objects)
+            // Check if the tag of the visible object is "Treasure"
             if (v != null && v.CompareTag("Treasure"))
             {
                 // If a treasure is found, return true
@@ -212,50 +171,39 @@ public class AI : MonoBehaviour
             }
         }
 
-        // If no treasure is found among visible objects, return false
+        // If no treasure is found, return false
         return false;
     }
 
+    // Task to check for visible stolen treasure
     [Task]
     bool IsVisible_StolenTreasure()
     {
         // Iterate through the list of visible objects
         foreach (var v in vision.visibles)
         {
-            // Check if the visible object is a treasure (replace "Treasure" with the tag or name of your treasure objects)
+            // Check if the tag of the visible object is "Stolen"
             if (v != null && v.CompareTag("Stolen"))
             {
-                // If a treasure is found, return true
+                // If a stolen treasure is found, return true
                 return true;
             }
         }
 
-        // If no treasure is found among visible objects, return false
+        // If no stolen treasure is found, return false
         return false;
     }
 
+    // Task to set the destination to the treasure
     [Task]
     bool SetDestination_Treasure()
     {
-        //foreach (var v in vision.visibles)
-        //{
-        //    if (v != null && v.CompareTag("Treasure"))
-        //    {
-        //        self.SetDestination(v.transform.position);
-        //    }
-        //}
-
-        //navMeshAgent.stoppingDistance = 1f;
-
-        //if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
-        //{
-        //    Task.current.Succeed();
-        //}
-
         bool succeeded = false;
 
+        // Iterate through the list of visible objects
         foreach (var v in vision.visibles)
         {
+            // Check if the tag of the visible object is "Treasure"
             if (v != null && v.CompareTag("Treasure"))
             {
                 self.SetDestination(v.transform.position);
@@ -264,31 +212,18 @@ public class AI : MonoBehaviour
         }
 
         return succeeded;
-
     }
 
+    // Task to set the destination to the stolen treasure
     [Task]
     bool SetDestination_StolenTreasure()
     {
-        //foreach (var v in vision.visibles)
-        //{
-        //    if (v != null && v.CompareTag("Stolen"))
-        //    {
-        //        self.SetDestination(v.transform.position);
-        //    }
-        //}
-
-        //navMeshAgent.stoppingDistance = 1f;
-
-        //if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
-        //{
-        //    Task.current.Succeed();
-        //}
-
         bool succeeded = false;
 
+        // Iterate through the list of visible objects
         foreach (var v in vision.visibles)
         {
+            // Check if the tag of the visible object is "Stolen"
             if (v != null && v.CompareTag("Stolen"))
             {
                 self.SetDestination(v.transform.position);
@@ -297,9 +232,9 @@ public class AI : MonoBehaviour
         }
 
         return succeeded;
-
     }
 
+    // Task to set the destination to the nest
     [Task]
     void SetDestination_Nest()
     {
@@ -308,8 +243,10 @@ public class AI : MonoBehaviour
             self.SetDestination(nest.position);
         }
 
+        // Set stopping distance for the NavMeshAgent
         navMeshAgent.stoppingDistance = 1f;
 
+        // Check if the bot has reached the destination
         if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
         {
             Task.current.Succeed();
@@ -317,25 +254,28 @@ public class AI : MonoBehaviour
         }
     }
 
+    // Task to pick up visible treasures
     [Task]
     public void PickUp()
     {
+        // Iterate through the list of visible objects
         foreach (var v in vision.visibles)
         {
             if (v != null && v.CompareTag("Treasure") || v.CompareTag("Stolen"))
             {
-                v.transform.position = ObjectGrabPointBot.position;
-                v.transform.SetParent(ObjectGrabPointBot);
+                v.transform.position = ObjectGrabPointBot.position; // Move object to grab point
+                v.transform.SetParent(ObjectGrabPointBot); // Set parent to grab point
                 v.transform.localRotation = Quaternion.identity; // Reset local rotation
-                v.GetComponent<Rigidbody>().useGravity = false;
-                v.GetComponent<BoxCollider>().enabled = false;
-                v.tag = "Marked";
+                v.GetComponent<Rigidbody>().useGravity = false; // Disable gravity
+                v.GetComponent<BoxCollider>().enabled = false; // Disable collider
+                v.tag = "Marked"; // Change tag to "Marked"
             }
         }
 
         Task.current.Succeed();
     }
 
+    // Task to drop the held object
     [Task]
     public void Drop()
     {
@@ -343,18 +283,18 @@ public class AI : MonoBehaviour
         {
             foreach (Transform child in ObjectGrabPointBot)
             {
-                child.SetParent(null);
+                child.SetParent(null); // Detach the child
                 var rb = child.GetComponent<Rigidbody>();
                 var collider = child.GetComponent<BoxCollider>();
 
                 if (rb != null)
                 {
-                    rb.useGravity = true;
+                    rb.useGravity = true; // Enable gravity
                 }
 
                 if (collider != null)
                 {
-                    collider.enabled = true;
+                    collider.enabled = true; // Enable collider
                 }
             }
         }
@@ -362,26 +302,31 @@ public class AI : MonoBehaviour
         Task.current.Succeed();
     }
 
+    // Task to check if the player has marked treasure
     [Task]
     public bool PlayerHasMarkedTreasure()
     {
         if (ObjectGrabPoint == null)
         {
-            // Player or ObjectGrabPoint has been destroyed, so stop further processing
+            // If player or ObjectGrabPoint has been destroyed, stop processing
             return false;
         }
 
         if (ObjectGrabPoint.childCount >= 1)
         {
+            // Check if the player is holding anything
             foreach (Transform child in ObjectGrabPoint)
             {
+                // Check if the player is holding a marked treasure
                 if (child.tag == "Marked")
                 {
+                    // If the player is holding a marked treasure, return true
                     return true;
                 }
             }
         }
 
+        // If the player is not holding a marked treasure, return false
         return false;
     }
 

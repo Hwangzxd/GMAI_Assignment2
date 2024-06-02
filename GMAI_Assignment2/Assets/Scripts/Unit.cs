@@ -2,35 +2,36 @@
 using System.Collections;
 using Panda;
 
+// Code referenced from PandaBT plugin "Shooter" example project
+
 public class Unit : MonoBehaviour
 {
-    public int team = 0; // Team the unit is in. A unit in a different team is an enemy.
-    public float health = 10.0f; // HP
+    public int team = 0; // A unit in a different team is an enemy
+    public float health = 10.0f; 
     public GameObject bulletPrefab;
-    //public GameObject jammedEffectPrefab;
     public float rotationSpeed = 1.0f;
-    public float reloadRate = 0.5f; // How many bullet per second get restored.
+    public float reloadRate = 0.5f; 
     public int ammo = 5;
 
     public GameObject explosionPrefab;
     [HideInInspector]
-    public Unit shotBy; // Last unit that shot this unit.
+    public Unit shotBy; 
 
     [HideInInspector]
-    public float lastShotTime; // Time when the unit has been shot for the last time.
+    public float lastShotTime; 
 
     [HideInInspector]
-    public Unit lastHit; // Last unit this unit shot to.
+    public Unit lastHit; 
 
     [HideInInspector]
-    public float lastHitTime; // Last time this unit hit another unit.
+    public float lastHitTime; 
 
     [HideInInspector]
     public UnityEngine.AI.NavMeshAgent navMeshAgent;
 
     [HideInInspector]
-    public Vector3 destination; // The movement destination.
-    public Vector3 target;      // The position to aim to.
+    public Vector3 destination; // The movement destination
+    public Vector3 target;      // The position to aim to
 
     [HideInInspector]
     public float startHealth;
@@ -39,9 +40,8 @@ public class Unit : MonoBehaviour
     public int startAmmo;
 
     [HideInInspector]
-    public float lastReloadTime; // Last time a bullet has been restored.
+    public float lastReloadTime;
 
-    // Use this for initialization
     void Start()
     {
         lastShotTime = lastHitTime = float.NegativeInfinity;
@@ -92,7 +92,6 @@ public class Unit : MonoBehaviour
             Task.current.debugInfo = string.Format("a={0}", ammo);
         return ammo < i;
     }
-
 
     [Task]
     public bool SetDestination(Vector3 p)
@@ -158,15 +157,12 @@ public class Unit : MonoBehaviour
     [Task]
     public bool Fire()
     {
-
         var bulletOb = GameObject.Instantiate(bulletPrefab);
 
         bulletOb.transform.position = this.transform.position;
         bulletOb.transform.rotation = this.transform.rotation;
         if (ammo > 0)
         {
-
-
             var bullet = bulletOb.GetComponent<Bullet>();
             bullet.shooter = this.gameObject;
 
@@ -178,7 +174,6 @@ public class Unit : MonoBehaviour
             lastReloadTime = Time.time + (1.0f / reloadRate);
             bulletOb.transform.parent = this.transform;
         }
-
 
         return true;
     }
@@ -205,8 +200,6 @@ public class Unit : MonoBehaviour
 
         if (targetDelta.magnitude > 0.2f)
         {
-
-
             Vector3 axis = Vector3.up * Mathf.Sign(Vector3.Cross(this.transform.forward, targetDir).y);
 
             var rot = Quaternion.AngleAxis(rotationSpeed * Time.deltaTime, axis);
@@ -233,7 +226,6 @@ public class Unit : MonoBehaviour
 
         if (Task.isInspected)
             Task.current.debugInfo = string.Format("angle={0}", Vector3.Angle(targetDir, this.transform.forward));
-
 
     }
     #endregion

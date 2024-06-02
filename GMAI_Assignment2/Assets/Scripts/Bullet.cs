@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+//Code taken from PandaBT plugin "Shooter" example project
+
 public class Bullet : MonoBehaviour
 {
     public float speed = 1.0f;

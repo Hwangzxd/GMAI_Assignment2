@@ -5,29 +5,18 @@ using System;
 
 public class Player : MonoBehaviour
 {
+    // A static event to signal when the player is destroyed
     public static event Action OnPlayerDestroyed;
-
-    //public int maxHealth = 10;
-    //public int currentHealth;
 
     void Start()
     {
-        //currentHealth = maxHealth;
+
     }
 
     void OnDestroy()
     {
+        // Invoke the OnPlayerDestroyed event if there are any subscribers
         OnPlayerDestroyed?.Invoke();
     }
-
-    //public void TakeDamage(int amount)
-    //{
-    //    currentHealth -= amount;
-
-    //    if (currentHealth <= 0)
-    //    {
-    //        //Disable player movement and drop items if any
-    //    }
-    //}
 
 }

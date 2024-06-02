@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+//Code taken from GMAI_Assignment2_Example project
+
 public class PlayerMovement : MonoBehaviour
 {
     CharacterController characterController;

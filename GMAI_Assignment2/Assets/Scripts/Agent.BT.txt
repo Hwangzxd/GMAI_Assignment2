@@ -1,8 +1,10 @@
 tree("Root")
 	repeat
 		fallback
-			tree("GoToTreasure")
 			tree("Reload")
+			tree("ChasePlayer")
+			tree("GoToStolenTreasure")
+			tree("GoToTreasure")
 			tree("Attack")
 			random
 				tree("Roaming")
@@ -13,9 +15,10 @@ tree("Idle")
 	while
 		sequence
 			not IsVisible_Treasure
+			not IsVisible_StolenTreasure
 			not HasEnemy
 			not Acquire_Enemy
-		repeat 2
+		repeat 4
 			sequence
 				random
 					SetTarget_Angle(90.0)
@@ -30,16 +33,37 @@ tree("Roaming")
 	while 
 		sequence
 			not IsVisible_Treasure
+			not IsVisible_StolenTreasure
 			not IsVisible_Player
-		repeat 2
+		sequence
+			repeat 4
+				sequence
+					SetDestination_Waypoint
+					SetTarget_Destination
+					AimAt_Target
+					MoveTo_Destination
+					Wait(0.3)
+					NextWaypoint
 			sequence
-				SetDestination_Waypoint
-				SetTarget_Destination
-				AimAt_Target
-				MoveTo_Destination
-				Wait(0.3)
-				NextWaypoint
+				tree("ReturnToNest")
 		
+
+tree("ChasePlayer")
+	while PlayerHasMarkedTreasure
+		fallback
+			sequence
+				IsVisible_Player
+				HasAmmo
+				Stop
+				Wait(0.5)
+				SetTarget_Enemy
+				AimAt_Target
+				tree("Fire")
+			repeat 1
+				sequence
+					SetDestination_Enemy
+					MoveTo_Destination
+			
 
 tree("Attack")
 	fallback
@@ -73,9 +97,20 @@ tree("Reload")
 
 
 tree("GoToTreasure")
+	while not PlayerHasMarkedTreasure
+		sequence
+			IsVisible_Treasure
+			SetDestination_Treasure
+			MoveTo_Destination
+			PickUp
+			tree("ReturnToNest")
+
+
+tree("GoToStolenTreasure")
 	sequence
-		IsVisible_Treasure
-		SetDestination_Treasure
+		IsVisible_StolenTreasure
+		SetDestination_StolenTreasure
+		MoveTo_Destination
 		PickUp
 		tree("ReturnToNest")
 
@@ -85,32 +120,3 @@ tree("ReturnToNest")
 		SetDestination_Nest
 		Drop
 		tree("Idle")
-
-
-tree("Chase")
-	repeat
-		sequence
-			SetDestination_Enemy
-			IsVisible_Player
-			HasAmmo
-			Stop
-			Wait(0.5)
-			AimAt_Target
-			tree("Fire")
-
-
-tree("ChaseEnemy")
-	fallback
-		while not IsVisible_Player
-			parallel
-				repeat
-					sequence
-                        HasAmmo
-						Stop
-						Wait(0.5)
-						AimAt_Target
-						tree("Fire")
-				repeat
-					sequence
-						SetDestination_Enemy
-						MoveTo_Destination

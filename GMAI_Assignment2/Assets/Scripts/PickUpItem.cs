@@ -88,6 +88,11 @@ public class PickUpItem : MonoBehaviour
 
             if (forceMulti > 10)
             {
+                if (this.transform.tag == "Marked")
+                {
+                    this.transform.tag = "Stolen";
+                }
+
                 rb.AddForce(player.transform.forward * forceMulti);
                 this.transform.parent = null;
                 GetComponent<Rigidbody>().useGravity = true;
@@ -107,6 +112,11 @@ public class PickUpItem : MonoBehaviour
         if (itemIsPicked)
         {
             // Detach the item from the player
+            if (this.transform.tag == "Marked")
+            {
+                this.transform.tag = "Stolen";
+            }
+
             this.transform.parent = null;
             GetComponent<Rigidbody>().useGravity = true;
             GetComponent<BoxCollider>().enabled = true;
